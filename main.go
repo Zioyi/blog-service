@@ -29,6 +29,10 @@ func init() {
 	}
 }
 
+// @title 博客系统
+// @version 1.0
+// @description Go 语言学习
+// @termsOfService https://github.com/Zioyi
 func main() {
 	gin.SetMode(global.ServerSetting.RunMode)
 	router := routers.NewRouter()
@@ -39,8 +43,6 @@ func main() {
 		WriteTimeout:   global.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-
-	global.Logger.Fatalf("%s: blog-servier/%s", "zioyi", "blog-service")
 	s.ListenAndServe()
 }
 

@@ -1,5 +1,7 @@
 package model
 
+import "github.com/Zioyi/blog-service/pkg/app"
+
 type Tag struct {
 	// id
 	Id int32 `json:"id"`
@@ -19,4 +21,9 @@ type Tag struct {
 
 func (t Tag) TableName() string {
 	return "blog_tag"
+}
+
+type TagSwagger struct {
+	List  []*Tag
+	pager *app.Pager
 }
