@@ -14,7 +14,7 @@ type Response struct {
 type Pager struct {
 	Page      int `json:"page"`
 	PageSize  int `json:"page_size"`
-	TotalRows int `json:"total_rows`
+	TotalRows int `json:"total_rows"`
 }
 
 func NewResponse(ctx *gin.Context) *Response {
