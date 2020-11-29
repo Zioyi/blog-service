@@ -23,7 +23,7 @@ func (s StrTo) Uint32() (uint32, error) {
 	return uint32(v), err
 }
 
-func (s StrTo) MustInt32() uint32 {
+func (s StrTo) MustUInt32() uint32 {
 	v, _ := s.Uint32()
 	return v
 }

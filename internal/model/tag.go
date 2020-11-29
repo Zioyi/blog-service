@@ -1,26 +1,64 @@
 package model
 
-import "github.com/Zioyi/blog-service/pkg/app"
+import (
+	"github.com/Zioyi/blog-service/pkg/app"
+	"github.com/jinzhu/gorm"
+)
 
 type Tag struct {
-	// id
-	Id int32 `json:"id"`
+	*Model
 	// 标签名称
 	Name string `json:"name"`
 	// 状态 0为禁用、1为启用
-	State int8 `json:"state"`
-	// 创建时间
-	CreatedOn int32 `json:"created_on"`
-	// 创建人
-	CreatedBy string `json:"created_by"`
-	// 修改时间
-	ModifiedOn int32 `json:"modified_on"`
-	// 修改人
-	ModifiedBy string `json:"modified_by"`
+	State uint8 `json:"state"`
 }
 
 func (t Tag) TableName() string {
 	return "blog_tag"
+}
+
+func (t Tag) Count(db *gorm.DB) (int, error) {
+	var count int
+	if t.Name != "" {
+		db = db.Where("name = ?", t.Name)
+	}
+	db = db.Where("State = ?", t.State)
+	err := db.Model(&t).Where("is_del = ?", 0).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+
+	return count, err
+}
+
+func (t Tag) List(db *gorm.DB, pageOffset, pageSize int) ([]*Tag, error) {
+	var tags []*Tag
+	var err error
+	if pageOffset >= 0 && pageSize >= 0 {
+		db = db.Offset(pageOffset).Limit(pageSize)
+	}
+	if t.Name != "" {
+		db = db.Where("name = ?", t.Name)
+	}
+	db = db.Where("state = ?", t.State)
+	if err = db.Where("is_del = ?", 0).Find(&tags).Error; err != nil {
+		return nil, err
+	}
+
+	return tags, nil
+}
+
+func (t Tag) Create(db *gorm.DB) error {
+	return db.Create(&t).Error
+}
+
+func (t Tag) Update(db *gorm.DB, values interface{}) error {
+	db = db.Model(&Tag{}).Where("id = ? AND is_del= ?", t.ID, 0)
+	return db.Updates(values).Error
+}
+
+func (t Tag) Delete(db *gorm.DB) error {
+	return db.Where("id = ? AND is_del = ?", t.Model.ID, 0).Delete(&t).Error
 }
 
 type TagSwagger struct {

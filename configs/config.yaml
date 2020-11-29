@@ -13,10 +13,10 @@ Database:
   DBType: mysql
   Username: root
   Password: toor333666
-  Host: 192.168.162.164:3309
+  Host: mysql:3309
   DBName: blog_service
   TablePrefidx: blog_
-  Charset: utf8
+  Charset: utf8mb4
   ParseTime: True
   MaxIdleConns: 10
   MaxOpenConns: 30
